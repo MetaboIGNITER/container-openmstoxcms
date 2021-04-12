@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 
-
 # how to run
 # ./featurexmlToCamera.r input=filename.featureXML sampleClass=test realFileName=filename.featureXML polarity=[positive or negative] output=output.rdata phenoFile=phenotype.csv phenoDataColumn=Class changeNameTO=filename.mzML
 
