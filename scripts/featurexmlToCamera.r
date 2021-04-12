@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 # how to run
-# ./featurexmlToCamera.r input=filename.featureXML sampleClass=test realFileName=filename.featureXML polarity=[positive or negative] output=output.rdata phenoFile=phenotype.csv phenoDataColumn=Class changeNameTO=filename.mzML
+# ./featurexmlToCamera.r input=filename.featureXML mzMLfiles=filename.mzML sampleClass=test realFileName=filename.featureXML polarity=[positive or negative] output=output.rdata phenoFile=phenotype.csv phenoDataColumn=Class changeNameTO=filename.mzML
 
 options(stringAsfactors = FALSE, useFancyQuotes = FALSE)
 
@@ -13,6 +13,7 @@ require(xcms)
 require(CAMERA)
 require(stringr)
 
+mzMLfiles<-NA
 featureXMLFile<-NA
 realFileName<-NA
 output<-NA
@@ -40,6 +41,10 @@ for(arg in args)
   if(argCase=="sampleClass")
   {
     sampleClass=as.character(value)
+  }
+  if(argCase=="mzMLfiles")
+  {
+    mzMLfiles=as.character(value)
   }
   if(argCase=="realFileName")
   {
@@ -88,6 +93,12 @@ if(!file.exists(featureXMLFile))
 {
   stop("The input file does not exist!")
 }
+
+if(!file.exists(mzMLfiles))
+{
+  stop("The input mzMLfiles file does not exist!")
+}
+
 
 if(!is.na(realFileName))
 {
@@ -138,6 +149,9 @@ allMassTraces<- isotopeData[,c("mz",
                  "sample",
                  "isotopes") ]
 
+ss<-xcms::xcmsRaw("D1.mzML")
+rawMzData<-xcms::xcmsRaw(mzMLfiles)
+rawRT<-rawMzData@scantime
 
 cameraIsotops<-list()
 for(i in 1:nrow(allMassTraces)){
@@ -204,9 +218,9 @@ tmpXCMSSet@groups<-matrix(nrow = 0,ncol = 0)
 tmpXCMSSet@groupidx<-list()
 tmpXCMSSet@filled<-integer(0)
 tmpXCMSSet@rt$raw<-list()
-tmpXCMSSet@rt$raw[[1]]<-as.numeric(sort(unique(allMassTraces[,"rt"])))
+tmpXCMSSet@rt$raw[[1]]<-rawRT
 tmpXCMSSet@rt$corrected<-list()
-tmpXCMSSet@rt$corrected[[1]]<-as.numeric(sort(unique(allMassTraces[,"rt"])))
+tmpXCMSSet@rt$corrected[[1]]<-rawRT
 tmpXCMSSet@polarity=polarity
 tmpXCMSSet@mslevel=1
 tmpPheno<-data.frame(class=sampleClass)
