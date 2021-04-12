@@ -212,7 +212,7 @@ tmpXCMSSet@mslevel=1
 tmpPheno<-data.frame(class=sampleClass)
 rownames(tmpPheno)<-sampleName
 tmpXCMSSet@phenoData<-tmpPheno
-tmpXCMSSet@filepaths<-as.character(featureXMLFile)
+tmpXCMSSet@filepaths<-as.character(sampleName)
 cameraObject@xcmsSet<-tmpXCMSSet
 
 cameraObject@groupInfo<-as.matrix(sapply(conversionTmp, as.numeric))
