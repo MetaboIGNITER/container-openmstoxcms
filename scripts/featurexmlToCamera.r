@@ -149,7 +149,7 @@ allMassTraces<- isotopeData[,c("mz",
                  "sample",
                  "isotopes") ]
 
-ss<-xcms::xcmsRaw("D1.mzML")
+
 rawMzData<-xcms::xcmsRaw(mzMLfiles)
 rawRT<-rawMzData@scantime
 
